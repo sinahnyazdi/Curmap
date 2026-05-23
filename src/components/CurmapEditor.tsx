@@ -89,6 +89,7 @@ export function CurmapEditor({ curmap, onReload, onBack }: Props) {
   const dragHistoryCommittedRef = useRef(false);
   const saveQueuedRef = useRef(false);
   const silentSaveRef = useRef(false);
+  const skipDirtyTrackingRef = useRef(false);
   const loadedCurmapIdRef = useRef(curmap.id);
   const lastSyncedUpdatedAtRef = useRef<string | null>(null);
   const curmapMetaRef = useRef(curmapMeta(curmap));
@@ -145,6 +146,7 @@ export function CurmapEditor({ curmap, onReload, onBack }: Props) {
 
   const syncFromServerCurmap = useCallback(
     (source: Curmap, options?: { resetHistory?: boolean }) => {
+      skipDirtyTrackingRef.current = true;
       curmapMetaRef.current = curmapMeta(source);
       setDocumentNodes(source.nodes);
       applyDocumentToFlow(source.nodes);
@@ -155,6 +157,9 @@ export function CurmapEditor({ curmap, onReload, onBack }: Props) {
       if (options?.resetHistory !== false) {
         resetHistory();
       }
+      queueMicrotask(() => {
+        skipDirtyTrackingRef.current = false;
+      });
     },
     [applyDocumentToFlow, resetHistory],
   );
@@ -169,11 +174,20 @@ export function CurmapEditor({ curmap, onReload, onBack }: Props) {
 
   useEffect(() => {
     const idChanged = loadedCurmapIdRef.current !== curmap.id;
-    const externalUpdate = lastSyncedUpdatedAtRef.current !== curmap.updatedAt;
-    if (!idChanged && !externalUpdate) return;
+    const lastSynced = lastSyncedUpdatedAtRef.current;
 
-    loadedCurmapIdRef.current = curmap.id;
-    syncFromServerCurmap(curmap);
+    if (idChanged) {
+      loadedCurmapIdRef.current = curmap.id;
+      syncFromServerCurmap(curmap);
+      return;
+    }
+
+    if (lastSynced === curmap.updatedAt) return;
+
+    // Parent `curmap` can lag behind applyAgentCurmap; never roll back to older props.
+    if (lastSynced && curmap.updatedAt < lastSynced) return;
+
+    syncFromServerCurmap(curmap, { resetHistory: false });
   }, [curmap, syncFromServerCurmap]);
 
   const selected = nodes.find((n) => n.id === selectedId);
@@ -186,6 +200,7 @@ export function CurmapEditor({ curmap, onReload, onBack }: Props) {
   }, [selected]);
 
   const markDirty = useCallback((options?: { silent?: boolean }) => {
+    if (skipDirtyTrackingRef.current) return;
     dirtyRef.current = true;
     setDirty(true);
     setEditRevision((r) => r + 1);
@@ -395,12 +410,10 @@ export function CurmapEditor({ curmap, onReload, onBack }: Props) {
     }
 
     try {
-      while (dirtyRef.current) {
-        const payload = buildCurrentCurmapRef.current();
-        const saved = await saveCurmap(payload);
-        curmapMetaRef.current = curmapMeta(saved);
-        if (!dirtyRef.current) break;
-      }
+      const payload = buildCurrentCurmapRef.current();
+      const saved = await saveCurmap(payload);
+      curmapMetaRef.current = curmapMeta(saved);
+      lastSyncedUpdatedAtRef.current = saved.updatedAt;
       dirtyRef.current = false;
       setDirty(false);
       if (!silent) {
@@ -417,10 +430,9 @@ export function CurmapEditor({ curmap, onReload, onBack }: Props) {
       setStatus(err instanceof Error ? err.message : "Save failed");
     } finally {
       saveInFlightRef.current = false;
-      if (saveQueuedRef.current) {
-        saveQueuedRef.current = false;
-        void flushSaveRef.current();
-      }
+      const pending = saveQueuedRef.current || dirtyRef.current;
+      saveQueuedRef.current = false;
+      if (pending) void flushSaveRef.current();
     }
   }, [clearSavedStatusTimer]);
 
@@ -455,10 +467,9 @@ export function CurmapEditor({ curmap, onReload, onBack }: Props) {
   }, [buildCurrentCurmap]);
 
   const reloadFromServer = useCallback(async () => {
-    if (dirtyRef.current) {
-      await flushSaveRef.current();
-    }
-    if (dirtyRef.current) return;
+    dirtyRef.current = false;
+    setDirty(false);
+    saveQueuedRef.current = false;
     try {
       const fresh = await getCurmap(curmap.id);
       applyAgentCurmap(fresh);
@@ -537,8 +548,9 @@ export function CurmapEditor({ curmap, onReload, onBack }: Props) {
                 }
                 onNodesChange(changes);
                 if (dragEnd) {
+                  const userDragged = dragHistoryCommittedRef.current;
                   dragHistoryCommittedRef.current = false;
-                  markDirty();
+                  if (userDragged) markDirty();
                 }
               }}
               onEdgesChange={(changes) => {

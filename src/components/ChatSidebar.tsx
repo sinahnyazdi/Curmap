@@ -248,13 +248,14 @@ export function ChatSidebar({ curmapId, curmapTitle, onCurmapUpdated }: Props) {
           <span className="chat-composer-hint">Enter to send · Shift+Enter for newline</span>
           <div className="chat-composer-actions">
             {streaming ? (
-              <IconButton tooltip="Stop generating" onClick={handleStop}>
+              <IconButton tooltip="Stop generating" tooltipPlacement="top" onClick={handleStop}>
                 <StopIcon />
               </IconButton>
             ) : null}
             <IconButton
               type="submit"
               tooltip="Send message"
+              tooltipPlacement="top"
               className="btn icon-btn primary"
               disabled={!configured || streaming || !input.trim()}
             >

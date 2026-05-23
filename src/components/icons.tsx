@@ -143,10 +143,11 @@ export function SendIcon(props: IconProps) {
 }
 
 export function StopIcon(props: IconProps) {
+  const { size = 18, ...rest } = props;
   return (
-    <Icon {...props}>
-      <Path d="M5 5h14v14H5z" />
-    </Icon>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden {...rest}>
+      <rect x="6" y="6" width="12" height="12" rx="1.5" />
+    </svg>
   );
 }
 
