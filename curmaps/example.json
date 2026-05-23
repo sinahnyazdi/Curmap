@@ -1,0 +1,56 @@
+{
+  "id": "example",
+  "title": "Example project plan",
+  "description": "Sample map included with Curmap. Edit freely or delete and create your own.",
+  "createdAt": "2026-05-23T12:00:00.000Z",
+  "updatedAt": "2026-05-23T10:03:56.863Z",
+  "nodes": [
+    {
+      "id": "root",
+      "label": "Example project plan",
+      "parentId": null
+    },
+    {
+      "id": "phase-1",
+      "label": "Phase 1 — Foundation",
+      "parentId": "root",
+      "notes": "Core setup and shared infrastructure.",
+      "collapsed": true,
+      "color": "company"
+    },
+    {
+      "id": "phase-2",
+      "label": "Phase 2 — Features",
+      "parentId": "root",
+      "collapsed": true
+    },
+    {
+      "id": "auth",
+      "label": "Authentication",
+      "parentId": "phase-1",
+      "notes": "Sign-in, sessions, and access control."
+    },
+    {
+      "id": "api",
+      "label": "REST API",
+      "parentId": "phase-1"
+    },
+    {
+      "id": "editor",
+      "label": "Curmap editor",
+      "parentId": "phase-2",
+      "color": "personal"
+    },
+    {
+      "id": "export",
+      "label": "Markdown export / import",
+      "parentId": "phase-2"
+    },
+    {
+      "id": "later",
+      "label": "Mobile app",
+      "parentId": "root",
+      "color": "deferred"
+    }
+  ]
+}

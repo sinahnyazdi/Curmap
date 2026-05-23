@@ -1,0 +1,139 @@
+/**
+ * Cursor design tokens for Curmap.
+ *
+ * IDE colors: `theme-cursor` in Cursor.app
+ *   - cursor-dark-color-theme.json (Cursor Dark)
+ *   - cursor-light-color-theme.json (Cursor Light)
+ *
+ * Brand accents: cursor.com marketing palette (canvas, inkwell, onyx orange).
+ */
+
+:root {
+  /* Brand (cursor.com) */
+  --cursor-brand-canvas: #f7f7f4;
+  --cursor-brand-inkwell: #262510;
+  --cursor-brand-muted-stone: #7a7974;
+  --cursor-brand-deep-shadow: #141414;
+  --cursor-brand-pebble: #e6e5e0;
+  --cursor-brand-highlight: #cdcdc9;
+  --cursor-brand-orange: #f54e00;
+  --cursor-brand-golden: #c08532;
+  --cursor-brand-forest: #34785c;
+  --cursor-brand-chartreuse: #4ade80;
+
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration: 0.18s;
+  --shadow-sm: 0 1px 2px rgb(20 20 20 / 6%);
+  --shadow: 0 4px 16px rgb(20 20 20 / 8%), 0 1px 3px rgb(20 20 20 / 5%);
+  --shadow-lg:
+    0 12px 40px rgb(20 20 20 / 10%),
+    0 4px 12px rgb(20 20 20 / 6%),
+    0 0 0 1px rgb(20 20 20 / 4%);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* Cursor Light — raw */
+  --cursor-shell-bg: #f3f3f3;
+  --cursor-editor-bg: #fcfcfc;
+  --cursor-line-highlight: #ededed;
+  --cursor-fg: #141414eb;
+  --cursor-fg-muted: #141414ad;
+  --cursor-fg-subtle: #1414147a;
+  --cursor-border: #14141413;
+  --cursor-border-strong: #14141426;
+  --cursor-button-bg: #3c7cab;
+  --cursor-button-fg: #fcfcfc;
+  --cursor-button-hover: #055180;
+  --cursor-link: #3c7cab;
+  --cursor-list-highlight: #6f9ba6;
+  --cursor-error: #cf2d56;
+  --cursor-warning: #c08532;
+  --cursor-success: #1f8a65;
+
+  /* Semantic (app) */
+  --bg: var(--cursor-shell-bg);
+  --bg-elevated: var(--cursor-editor-bg);
+  --surface: var(--cursor-editor-bg);
+  --surface-hover: var(--cursor-line-highlight);
+  --border: var(--cursor-border-strong);
+  --border-subtle: var(--cursor-border);
+  --text: var(--cursor-fg);
+  --text-secondary: var(--cursor-fg-muted);
+  --muted: var(--cursor-fg-subtle);
+  --accent: var(--cursor-button-bg);
+  --accent-hover: var(--cursor-button-hover);
+  --accent-muted: color-mix(in srgb, var(--cursor-button-bg) 12%, transparent);
+  --accent-brand: var(--cursor-brand-orange);
+  --primary-fg: var(--cursor-button-fg);
+  --danger: var(--cursor-error);
+  --danger-muted: color-mix(in srgb, var(--cursor-error) 12%, var(--surface));
+  --badge-fg: var(--cursor-fg-muted);
+  --badge-bg: color-mix(in srgb, var(--cursor-list-highlight) 18%, var(--surface));
+  --edge: color-mix(in srgb, var(--cursor-fg-subtle) 70%, var(--cursor-shell-bg));
+  --canvas-dot: var(--cursor-border-strong);
+  --header-blur: rgb(243 243 243 / 82%);
+
+  color: var(--text);
+  background: var(--bg);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Cursor Dark — raw */
+  --cursor-shell-bg: #141414;
+  --cursor-editor-bg: #181818;
+  --cursor-line-highlight: #262626;
+  --cursor-selection: #404040;
+  --cursor-fg: #e4e4e4eb;
+  --cursor-fg-muted: #e4e4e48d;
+  --cursor-fg-subtle: #e4e4e442;
+  --cursor-border: #e4e4e413;
+  --cursor-border-strong: #e4e4e426;
+  --cursor-button-bg: #81a1c1;
+  --cursor-button-fg: #191c22;
+  --cursor-button-hover: #87a6c4;
+  --cursor-link: #81a1c1;
+  --cursor-list-highlight: #88c0d0;
+  --cursor-error: #e34671;
+  --cursor-warning: #f1b467;
+  --cursor-success: #3fa266;
+
+  /* Semantic (app) */
+  --bg: var(--cursor-shell-bg);
+  --bg-elevated: var(--cursor-editor-bg);
+  --surface: var(--cursor-editor-bg);
+  --surface-hover: var(--cursor-line-highlight);
+  --border: var(--cursor-border-strong);
+  --border-subtle: var(--cursor-border);
+  --text: var(--cursor-fg);
+  --text-secondary: var(--cursor-fg-muted);
+  --muted: var(--cursor-fg-subtle);
+  --accent: var(--cursor-button-bg);
+  --accent-hover: var(--cursor-button-hover);
+  --accent-muted: color-mix(in srgb, var(--cursor-list-highlight) 14%, transparent);
+  --accent-brand: var(--cursor-brand-orange);
+  --primary-fg: var(--cursor-button-fg);
+  --danger: var(--cursor-error);
+  --danger-muted: color-mix(in srgb, var(--cursor-error) 14%, var(--surface));
+  --badge-fg: var(--cursor-fg-muted);
+  --badge-bg: color-mix(in srgb, var(--cursor-selection) 55%, var(--surface));
+  --edge: color-mix(in srgb, var(--cursor-fg-subtle) 85%, var(--cursor-shell-bg));
+  --canvas-dot: var(--cursor-line-highlight);
+  --header-blur: rgb(20 20 20 / 82%);
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 48%);
+  --shadow: 0 4px 20px rgb(0 0 0 / 44%), 0 1px 3px rgb(0 0 0 / 34%);
+  --shadow-lg: 0 16px 48px rgb(0 0 0 / 52%), 0 4px 12px rgb(0 0 0 / 38%);
+
+  color: var(--text);
+  background: var(--bg);
+}

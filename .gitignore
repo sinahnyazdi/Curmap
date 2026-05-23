@@ -1,0 +1,25 @@
+node_modules
+dist
+.DS_Store
+
+# Local env and secrets
+.env
+.env.*
+!.env.example
+
+# Personal maps stay local; only the sample is tracked
+curmaps/*
+!curmaps/example.json
+
+# Editor / tooling
+*.local
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.log
+.playwright-mcp
+coverage
+*.tsbuildinfo
+
+# OS / temp
+Thumbs.db

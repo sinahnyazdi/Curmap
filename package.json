@@ -1,0 +1,46 @@
+{
+  "name": "curmap",
+  "version": "0.1.0",
+  "description": "Curmap — local-first mind map editor with JSON storage, Markdown import/export, and optional Cursor assistant",
+  "license": "MIT",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,green \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:web": "vite",
+    "dev:api": "tsx watch server/index.ts",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "curmap": "tsx scripts/curmap-cli.ts",
+    "typecheck": "tsc -b --noEmit"
+  },
+  "dependencies": {
+    "@cursor/sdk": "^1.0.13",
+    "@xyflow/react": "^12.6.0",
+    "cors": "^2.8.5",
+    "dagre": "^0.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^5.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.15.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.18",
+    "@types/dagre": "^0.7.52",
+    "@types/express": "^5.0.2",
+    "@types/node": "^22.15.29",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "@vitejs/plugin-react": "^4.5.0",
+    "concurrently": "^9.1.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  },
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
+  "pnpm": {
+    "onlyBuiltDependencies": ["sqlite3"]
+  }
+}
